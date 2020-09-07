@@ -15,14 +15,16 @@ const DEFAULT_PINNING_STORE_PATH = ".pinning.store"
 
 program
     .command('daemon')
-    .option('--ipfs-api <url>', 'The IPFS HTTP API to use. IPFS will be created if the argument is not provided')
+    .option('--ipfs-api <url>', 'The ipfs http api to use')
     .option('--ethereum-rpc <url>', 'The Ethereum RPC URL used for communicating with Ethereum blockchain')
     .option('--anchor-service-api <url>', 'The anchor service URL to use')
     .option('--validate-docs', 'Validate documents according to their schemas. It is enabled by default')
     .option('--pinning <url...>', 'Pinning endpoints')
     .option('--pinning-store-path <url>', `The directory path used for pinning service. Defaults to WORKING_DIR/${DEFAULT_PINNING_STORE_PATH}`)
+    .option('--gateway', 'Makes read only endpoints available. It is disabled by default')
+    .option('--port <int>', 'Port daemon is availabe. Default is 7007')
     .description('Start the daemon')
-    .action(async ({ ipfsApi, ethereumRpc, anchorServiceApi, stateStorePath, validateDocs, pinning }) => {
+    .action(async ({ ipfsApi, ethereumRpc, anchorServiceApi, validateDocs, pinning, stateStorePath, gateway, port }) => {
         if (stateStorePath == null) {
             stateStorePath = DEFAULT_PINNING_STORE_PATH
         }
@@ -32,7 +34,9 @@ program
             anchorServiceUrl: anchorServiceApi,
             stateStorePath: stateStorePath,
             validateDocs,
-            pinning: pinning
+            pinning: pinning,
+            gateway,
+            port
         }
 
         if (ipfsApi) {
